@@ -32,8 +32,8 @@ char    *get_next_line(int fd)
         if (len == 0)
             return (buffer + total_len);
         *(read_buffer + len) = '\0';
-        if (buffer)
-            len += ft_strlen(buffer);
+        // if (buffer)
+        //     len += ft_strlen(buffer);
         find_newline_char(read_buffer);
 		buffer = gnl_realloc(buffer, read_buffer);
         *read_buffer = '\0';
