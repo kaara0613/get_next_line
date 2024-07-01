@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:03:48 by kaara             #+#    #+#             */
-/*   Updated: 2024/07/01 15:09:45 by kaara            ###   ########.fr       */
+/*   Updated: 2024/07/01 19:20:31 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@ size_t	ft_strlen(const char *str);
 
 char	*get_next_line(int fd);
 
-int		check_line(char *line);
+int		check_line(const char *line);
 char	*find_newline_char(char *read_buffer);
 char	*gnl_realloc(char *buffer, const char *read_buffer);
-size_t	gnl_strlcat(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 #endif
