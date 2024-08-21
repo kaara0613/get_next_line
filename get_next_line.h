@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:03:48 by kaara             #+#    #+#             */
-/*   Updated: 2024/07/02 16:53:25 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/21 14:21:45 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 # include <string.h>
 # include <unistd.h>
 
-size_t	ft_strlen(const char *str);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-char	*ft_strdup(char *src);
-char	*get_next_line(int fd);
+size_t		ft_strlen(const char *str);
+size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
+char		*ft_strrchr(const char *s, int c);
+char		*ft_substr(const char *s, unsigned int start, size_t len);
+char		*get_next_line(int fd);
 
 #endif
