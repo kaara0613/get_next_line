@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/21 14:39:49 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/21 17:44:04 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 //bufferがNULLの時を終了条件にすると、最初のNULLでgnlが終了する。
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 // static char	*find_newline_char(char *read_buffer);
 static char	*gnl_realloc(char *buffer, const char *read_buffer);
-static int	save_buffer(int	fd, char	*buffer);
+static int	save_buffer(int	fd, char	**buffer);
 static char	*make_result(const char	*buffer, unsigned int	start);
 
 // char	*get_next_line(int fd)
@@ -69,14 +70,14 @@ static char	*make_result(const char	*buffer, unsigned int	start);
 char	*get_next_line(int fd)
 {
 	int				i;
-	ssize_t			buffer_start;
+	size_t			buffer_start;
 	char			*result_buffer;
 	static char		*buffer = NULL;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer_start = ft_strlen(buffer);
-	i = save_buffer(fd, buffer);
+	i = save_buffer(fd, &buffer);
 	if (i == 0)
 		return (NULL);
 	result_buffer = make_result(buffer, (unsigned int)buffer_start);
@@ -106,7 +107,7 @@ static char	*gnl_realloc(char *buffer, const char *read_buffer)
 	return (new_buffer);
 }
 
-static int	save_buffer(int	fd, char	*buffer)//0から'\n'が見つかるまでbufferに貯める
+static int	save_buffer(int	fd, char	**buffer)//0から'\n'が見つかるまでbufferに貯める
 {
 	ssize_t		len;
 	char		read_buffer[BUFFER_SIZE + 1];
@@ -117,7 +118,7 @@ static int	save_buffer(int	fd, char	*buffer)//0から'\n'が見つかるまでbu
 		*read_buffer = '\0';
 		if (len < 0 || (len == 0 && read_buffer[0] == '\0'))
 			return (read_buffer[0] = '\0', 0);//read失敗もしくはの時。
-		buffer = gnl_realloc(buffer, read_buffer);
+		*buffer = gnl_realloc(*buffer, read_buffer);
 		if (!buffer) //allocation失敗
 			return (0);
 		if (ft_strrchr(read_buffer, '\n'))//read_buferに\nが見つかれば初期化してbreak。
@@ -132,7 +133,7 @@ static char	*make_result(const char	*buffer, unsigned int	start)
 	char			*result;
 
 	len = ft_strlen(buffer);
-    while (buffer[len] != '\n' && len >= 0)
+    while (buffer[len] != '\n' && 0 < len)
     	len--;
     if ((size_t)start == len + 1)
     {
