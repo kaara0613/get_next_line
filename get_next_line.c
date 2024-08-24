@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/24 00:25:08 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/24 20:58:29 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*get_next_line(int fd)
 		return (free(buffer), buffer = NULL, NULL);
 	result_buffer = make_result(buffer, buffer_start);
 	if (!result_buffer)//gnl終了
-		return (NULL);
+		return (free (buffer), buffer = NULL, NULL);
 	return (result_buffer);
 }
 
