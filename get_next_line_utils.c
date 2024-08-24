@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 11:01:02 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/21 14:26:05 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/21 18:09:57 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *str)
 	size_t	str_len;
 
 	str_len = 0;
-	if (!*str)
+	if (!str)
 		return (str_len);
 	while (str[str_len])
 		str_len++;
