@@ -6,7 +6,7 @@
 #    By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 11:15:32 by kaara             #+#    #+#              #
-#    Updated: 2024/08/24 18:40:39 by kaara            ###   ########.fr        #
+#    Updated: 2024/08/25 23:00:44 by kaara            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJS = ${SRCS:.c=.o}
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-BUFFER_SIZE = 42
+BUFFER_SIZE = 10
 
 AR = ar rcs
 RM = rm -f

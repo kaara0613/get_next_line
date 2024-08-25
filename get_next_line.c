@@ -6,18 +6,14 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/24 20:58:29 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/25 23:17:31 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//gnlはreadが0を2回返した時に終了する。
-//bufferがNULLの時を終了条件にすると、最初のNULLでgnlが終了する。
-
 #include "get_next_line.h"
-#include <stdio.h>
 
 static char	*gnl_realloc(char *buffer, const char *read_buffer);
-static int	save_buffer(int	fd, char	**buffer);
+static int	save_buffer(int fd, char **buffer);
 static char	*make_result(const char	*buffer, size_t	start);
 
 char	*get_next_line(int fd)
@@ -29,16 +25,21 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while(buffer && (buffer[buffer_start] != '\n' && buffer[buffer_start] != '\0'))
+	while (buffer && (buffer[buffer_start] != '\n'
+			&& buffer[buffer_start] != '\0'))
 		buffer_start++;
 	if (buffer && buffer[buffer_start] == '\n')
 		buffer_start++;
 	i = save_buffer(fd, &buffer);
-	if (i == 0)
-		return (free(buffer), buffer = NULL, NULL);
+	if (i <= 0)
+	{
+		if (buffer)
+			free(buffer);
+		return (buffer = NULL, buffer_start = 0, NULL);
+	}
 	result_buffer = make_result(buffer, buffer_start);
-	if (!result_buffer)//gnl終了
-		return (free (buffer), buffer = NULL, NULL);
+	if (!result_buffer)
+		return (free(buffer), buffer = NULL, buffer_start = 0, NULL);
 	return (result_buffer);
 }
 
@@ -58,30 +59,29 @@ static char	*gnl_realloc(char *buffer, const char *read_buffer)
 	if (buffer)
 	{
 		ft_strlcpy(new_buffer, buffer, buffer_len + 1);
-		free (buffer);
+		free(buffer);
 	}
 	ft_strlcpy(new_buffer + buffer_len,
 		read_buffer, ft_strlen(read_buffer) + 1);
 	return (new_buffer);
 }
 
-static int	save_buffer(int	fd, char	**buffer)//0から'\n'が見つかるまでbufferに貯める
+static int	save_buffer(int fd, char **buffer)
 {
-	ssize_t		len;
-	char		read_buffer[BUFFER_SIZE + 1];
+	ssize_t	len;
+	char	read_buffer[BUFFER_SIZE + 1];
 
 	while (1)
 	{
 		len = read(fd, read_buffer, BUFFER_SIZE);
-		// *read_buffer = '\0';
 		if (len < 0)
-			return (0);//read失敗。
+			return (-1);
 		if (len == 0 && read_buffer[0] == '\0')
-			return (2);//EOF到達。
+			return (2);
 		*buffer = gnl_realloc(*buffer, read_buffer);
-		if (!*buffer) //allocation失敗
-			return (free(buffer), buffer = NULL, read_buffer[0] = '\0', 0);
-		if (ft_strrchr(read_buffer, '\n'))//read_buferに\nが見つかれば初期化してbreak。
+		if (!*buffer)
+			return (0);
+		if (ft_strrchr(read_buffer, '\n'))
 			break ;
 		read_buffer[0] = '\0';
 	}
@@ -89,16 +89,16 @@ static int	save_buffer(int	fd, char	**buffer)//0から'\n'が見つかるまでb
 }
 
 static char	*make_result(const char	*buffer, size_t	start)
-{//startはsave_bufferを呼び出す前にgnlの最初で取得しておく。
-	size_t			len;
-	char			*result;
+{
+	size_t	len;
+	char	*result;
 
 	if (!buffer || buffer[start] == '\0')
-    	return (NULL);
-    len = start;
-	while(buffer[len] != '\n' && buffer[len] != '\0')
+		return (NULL);
+	len = start;
+	while (buffer[len] != '\n' && buffer[len] != '\0')
 		len++;
-    len = len - start;
+	len -= start;
 	result = ft_substr(buffer, start, len + 1);
 	if (!result)
 		return (NULL);
