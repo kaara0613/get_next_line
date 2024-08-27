@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 11:01:02 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/21 18:09:57 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/27 21:22:02 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,13 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 		return (NULL);
 	ft_strlcpy (ministr, s + start, len + 1);
 	return (ministr);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*p;
+
+	p = s;
+	while (n--)
+		*p++ = 0;
 }
