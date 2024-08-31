@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/27 21:10:31 by kaara            ###   ########.fr       */
+/*   Updated: 2024/08/31 11:39:05 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static int	save_buffer(int fd, char **buffer)
 
 	while (1)
 	{
+		ft_bzero(read_buffer, BUFFER_SIZE);
 		len = read(fd, read_buffer, BUFFER_SIZE);
 		if (len < 0)
 			return (ft_bzero(read_buffer, BUFFER_SIZE), -1);
