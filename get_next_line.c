@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: kaara <kaara@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/12/04 22:32:26 by kaara            ###   ########.fr       */
+/*   Updated: 2024/12/05 11:54:37 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 static char	*gnl_realloc(char *buffer, const char *read_buffer);
-static int	save_buffer(int fd, char **buffer);
+static bool	save_buffer(int fd, char **buffer);
 static char	*make_result(const char	*buffer, size_t	start);
 
 char	*get_next_line(int fd)
 {
-	int				i;
+	// int				i;
 	char			*result_buffer;
 	static size_t	buffer_start = 0;
 	static char		*buffer = NULL;
@@ -32,12 +32,21 @@ char	*get_next_line(int fd)
 		if (buffer[buffer_start] == '\n')
 			buffer_start++;
 	}
-	i = save_buffer(fd, &buffer);
-	if (i <= 0)
-		return (free(buffer), buffer = NULL, buffer_start = 0, NULL);
+	if (!save_buffer(fd, &buffer))
+	{
+		free(buffer);
+		buffer = NULL;
+		buffer_start = 0;
+		return (NULL);
+	}
 	result_buffer = make_result(buffer, buffer_start);
 	if (!result_buffer)
-		return (free(buffer), buffer = NULL, buffer_start = 0, NULL);
+	{
+		free(buffer);
+		buffer = NULL;
+		buffer_start = 0;
+		return (NULL);
+	}
 	return (result_buffer);
 }
 
@@ -64,45 +73,51 @@ static char	*gnl_realloc(char *buffer, const char *read_buffer)
 	return (new_buffer);
 }
 
-static int	save_buffer(int fd, char **buffer)
+static bool	save_buffer(int fd, char **buffer)
 {
 	ssize_t	len;
 	char	read_buffer[BUFFER_SIZE + 1];
 
 	while (1)
 	{
-		ft_bzero(read_buffer, BUFFER_SIZE);
+		ft_bzero(read_buffer, BUFFER_SIZE + 1);
 		len = read(fd, read_buffer, BUFFER_SIZE);
 		if (len < 0)
-			return (ft_bzero(read_buffer, BUFFER_SIZE), -1);
+		{
+			ft_bzero(read_buffer, BUFFER_SIZE);
+			return (false);
+		}
 		if (len == 0 && read_buffer[0] == '\0')
-			return (ft_bzero(read_buffer, BUFFER_SIZE), 2);
+			break ;
 		*buffer = gnl_realloc(*buffer, read_buffer);
 		if (!*buffer)
-			return (ft_bzero(read_buffer, BUFFER_SIZE), 0);
+		{
+			ft_bzero(read_buffer, BUFFER_SIZE);
+			return (false);
+		}
 		if (ft_strrchr(read_buffer, '\n'))
 			break ;
 		len = 0;
 		while (len <= BUFFER_SIZE)
 			read_buffer[len++] = '\0';
 	}
-	ft_bzero(read_buffer, BUFFER_SIZE);
-	return (1);
+	ft_bzero(read_buffer, BUFFER_SIZE + 1);
+	return (true);
 }
 
-static char	*make_result(const char	*buffer, size_t	start)
+static char	*make_result(const char	*buffer, size_t start)
 {
-	size_t	len;
-	char	*result;
+    size_t	len;
+    char	*result;
 
-	if (!buffer || buffer[start] == '\0')
-		return (NULL);
-	len = start;
-	while (buffer[len] != '\n' && buffer[len] != '\0')
-		len++;
-	len -= start;
-	result = ft_substr(buffer, start, len + 1);
-	if (!result)
-		return (NULL);
-	return (result);
+    if (!buffer || buffer[start] == '\0')
+        return (NULL);
+    len = start;
+    while (buffer[len] != '\n' && buffer[len] != '\0')
+        len++;
+    len -= start;
+    result = ft_substr(buffer, start, len + 1);
+    if (!result)
+        return (NULL);
+    return (result);
 }
