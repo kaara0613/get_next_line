@@ -6,7 +6,7 @@
 /*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/31 11:39:05 by kaara            ###   ########.fr       */
+/*   Updated: 2024/12/04 22:32:26 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while (buffer && (buffer[buffer_start] != '\n'
-			&& buffer[buffer_start] != '\0'))
-		buffer_start++;
-	if (buffer && buffer[buffer_start] == '\n')
-		buffer_start++;
+	if (buffer != NULL)
+	{
+		while (buffer[buffer_start] != '\n' && buffer[buffer_start] != '\0')
+			buffer_start++;
+		if (buffer[buffer_start] == '\n')
+			buffer_start++;
+	}
 	i = save_buffer(fd, &buffer);
 	if (i <= 0)
 		return (free(buffer), buffer = NULL, buffer_start = 0, NULL);
