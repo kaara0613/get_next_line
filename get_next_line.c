@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaara <kaara@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/12/05 11:54:37 by kaara            ###   ########.fr       */
+/*   Updated: 2024/12/05 12:49:21 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,18 @@ static char	*gnl_realloc(char *buffer, const char *read_buffer)
 static bool	save_buffer(int fd, char **buffer)
 {
 	ssize_t	len;
-	char	read_buffer[BUFFER_SIZE + 1];
+	char	*read_buffer;
 
+	read_buffer = (char *)malloc(BUFFER_SIZE + 1);
+	if (!read_buffer)
+		return (NULL);
 	while (1)
 	{
 		ft_bzero(read_buffer, BUFFER_SIZE + 1);
 		len = read(fd, read_buffer, BUFFER_SIZE);
 		if (len < 0)
 		{
-			ft_bzero(read_buffer, BUFFER_SIZE);
+			free(read_buffer);
 			return (false);
 		}
 		if (len == 0 && read_buffer[0] == '\0')
@@ -92,7 +95,7 @@ static bool	save_buffer(int fd, char **buffer)
 		*buffer = gnl_realloc(*buffer, read_buffer);
 		if (!*buffer)
 		{
-			ft_bzero(read_buffer, BUFFER_SIZE);
+			free(read_buffer);
 			return (false);
 		}
 		if (ft_strrchr(read_buffer, '\n'))
@@ -101,7 +104,7 @@ static bool	save_buffer(int fd, char **buffer)
 		while (len <= BUFFER_SIZE)
 			read_buffer[len++] = '\0';
 	}
-	ft_bzero(read_buffer, BUFFER_SIZE + 1);
+	free(read_buffer);
 	return (true);
 }
 
