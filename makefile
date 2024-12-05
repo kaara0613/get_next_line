@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+         #
+#    By: kaara <kaara@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 11:15:32 by kaara             #+#    #+#              #
-#    Updated: 2024/08/27 02:39:58 by kaara            ###   ########.fr        #
+#    Updated: 2024/12/05 13:08:39 by kaara            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJS = ${SRCS:.c=.o}
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-BUFFER_SIZE = 42
+BUFFER_SIZE = 10000000
 
 AR = ar rcs
 RM = rm -f

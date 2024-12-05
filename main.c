@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*   By: kaara <kaara@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 19:17:42 by kaara             #+#    #+#             */
-/*   Updated: 2024/08/22 18:57:10 by kaara            ###   ########.fr       */
+/*   Updated: 2024/12/05 13:13:34 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(void)
 	int		count;
 
 	count = 0;
-	fd = open("test.txt", O_RDONLY);
+	fd = open("gnlTester/files/multiple_line_no_nl", O_RDONLY);
 	if (fd == -1)
 	{
 		printf("Error opening file");
