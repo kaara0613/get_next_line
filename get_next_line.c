@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaara <kaara@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kaara <kaara@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:57:05 by kaara             #+#    #+#             */
-/*   Updated: 2024/12/05 14:28:30 by kaara            ###   ########.fr       */
+/*   Updated: 2024/12/06 21:45:37 by kaara            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,16 @@ char	*get_next_line(int fd)
 			buffer_start++;
 	}
 	if (!save_buffer(fd, &buffer))
-		return (free(buffer), NULL);
+	{
+		buffer_start = free_and_reset(&buffer);
+		return (buffer);
+	}
 	result_buffer = make_result(buffer, buffer_start);
 	if (!result_buffer)
-		return (free(buffer), NULL);
+	{
+		buffer_start = free_and_reset(&buffer);
+		return (buffer);
+	}
 	return (result_buffer);
 }
 
@@ -70,7 +76,7 @@ static bool	save_buffer(int fd, char **buffer)
 
 	read_buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!read_buffer)
-		return (NULL);
+		return (false);
 	if (!read_fd(fd, buffer, read_buffer))
 		return (free(read_buffer), false);
 	else
@@ -79,11 +85,14 @@ static bool	save_buffer(int fd, char **buffer)
 
 bool	read_fd(int fd, char **buffer, char *read_buffer)
 {
+	int		i;
 	ssize_t	len;
 
 	while (1)
 	{
-		ft_bzero(read_buffer, BUFFER_SIZE + 1);
+		i = 0;
+		while (i <= BUFFER_SIZE)
+			read_buffer[i++] = 0;
 		len = read(fd, read_buffer, BUFFER_SIZE);
 		if (len < 0)
 			return (false);
